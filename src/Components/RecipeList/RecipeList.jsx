@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./RecipeList.css";
-import { BsClock, BsHeart, BsPencil, BsTrash } from "react-icons/bs";
-import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
+import { BsClock, BsHeart } from "react-icons/bs";
+import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase";
 import { useNavigate } from "react-router-dom";
 
 const RecipeList = () => {
   const [recipes, setRecipes] = useState([]);
-  const [hoveredRecipeId, setHoveredRecipeId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const recipesPerPage = 6;
   const navigate = useNavigate();
@@ -29,21 +28,6 @@ const RecipeList = () => {
     fetchRecipes();
   }, []);
 
-  const handleEdit = (recipeId) => {
-    navigate(`/edit-recipe/${recipeId}`);
-  };
-
-  const handleDelete = async (recipeId) => {
-    if (window.confirm("Are you sure you want to delete this recipe?")) {
-      try {
-        await deleteDoc(doc(db, "recipes", recipeId));
-        setRecipes(recipes.filter((r) => r.id !== recipeId));
-      } catch (error) {
-        console.error("Error deleting:", error);
-      }
-    }
-  };
-
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
   const currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
@@ -52,20 +36,16 @@ const RecipeList = () => {
   return (
     <div className="recipe-wrapper">
       {recipes.length === 0 ? (
-        <p className="no-recipe-msg">No recipes found 🍽️</p>
+        <p className="no-recipe-msg">No recipes found</p>
       ) : (
         <>
           {currentRecipes.map((recipe) => (
             <div
               className="recipe-card"
               key={recipe.id}
-              onMouseEnter={() => setHoveredRecipeId(recipe.id)}
-              onMouseLeave={() => setHoveredRecipeId(null)}
+              onClick={() => navigate(`/recipe/${recipe.id}`)}
             >
-              <div
-                className="card-img-wrapper"
-                onClick={() => navigate(`/recipe/${recipe.id}`)}
-              >
+              <div className="card-img-wrapper">
                 <img src={recipe.imageUrl} alt={recipe.title} />
                 <span className="rating-badge">⭐ {recipe.rating || "4.5"}</span>
                 <div className="top-icons">
@@ -82,17 +62,6 @@ const RecipeList = () => {
                   <span>🍴 Serves {recipe.servings || "2"}</span>
                 </div>
               </div>
-
-              {hoveredRecipeId === recipe.id && (
-                <div className="bottom-action-buttons">
-                  <button className="action-btn edit-btn" onClick={() => handleEdit(recipe.id)}>
-                    <BsPencil /> Edit
-                  </button>
-                  <button className="action-btn delete-btn" onClick={() => handleDelete(recipe.id)}>
-                    <BsTrash /> Delete
-                  </button>
-                </div>
-              )}
             </div>
           ))}
 

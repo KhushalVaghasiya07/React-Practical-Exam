@@ -1,5 +1,6 @@
 export const initialAuthState = {
   user: null,
+  loading: true,
 };
 
 export const authReducer = (state, action) => {

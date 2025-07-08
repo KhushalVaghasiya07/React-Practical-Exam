@@ -1,10 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./AddRecipeForm.css";
 import { useStore } from "../../Services/store";
 import { addRecipe } from "../../Services/Actions/recipeActions";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { db } from "../../firebase";
 
 const AddRecipe = () => {
+  // Correctly get the param
+  const { id } = useParams();  // Use `id` if your route is "/edit-recipe/:id"
+  const isEditMode = Boolean(id);
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -12,7 +18,6 @@ const AddRecipe = () => {
     category: "",
     instructions: "",
   });
-
   const [ingredientInput, setIngredientInput] = useState("");
   const [ingredientsList, setIngredientsList] = useState([]);
 
@@ -20,7 +25,41 @@ const AddRecipe = () => {
   const user = state.auth.user;
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
+  useEffect(() => {
+    const fetchRecipe = async () => {
+      if (!isEditMode) return;
+
+      try {
+        const recipeRef = doc(db, "recipes", id);
+        const docSnap = await getDoc(recipeRef);
+
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setFormData({
+            title: data.title || "",
+            description: data.description || "",
+            imageUrl: data.imageUrl || "",
+            category: data.category || "",
+            instructions: data.instructions || "",
+          });
+          setIngredientsList(
+            data.ingredients
+              ? data.ingredients.split(",").map(item => item.trim())
+              : []
+          );
+        } else {
+          alert("❌ Recipe not found!");
+          navigate("/my-recipes");
+        }
+      } catch (err) {
+        console.error("Error fetching recipe:", err);
+      }
+    };
+
+    fetchRecipe();
+  }, [id, isEditMode, navigate]);
+
+  const handleChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -31,51 +70,41 @@ const AddRecipe = () => {
     }
   };
 
-  const handleRemoveIngredient = (index) => {
-    const updatedList = ingredientsList.filter((_, i) => i !== index);
-    setIngredientsList(updatedList);
+  const handleRemoveIngredient = index => {
+    setIngredientsList(list => list.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
+    if (!user) return alert("⚠️ Please log in.");
 
-    if (!user) {
-      alert("⚠️ Please login to submit a recipe.");
-      return;
-    }
+    const finalData = {
+      ...formData,
+      ingredients: ingredientsList.join(", "),
+    };
 
     try {
-      await addRecipe(
-        { ...formData, ingredients: ingredientsList.join(", ") },
-        user
-      )(dispatch);
-
-      alert("✅ Recipe submitted successfully!");
-
-      // Reset all fields
-      setFormData({
-        title: "",
-        description: "",
-        imageUrl: "",
-        category: "",
-        instructions: "",
-      });
-      setIngredientsList([]);
-      setIngredientInput("");
-
-      navigate("/");
-    } catch (error) {
-      alert("❌ Error: " + error.message);
+      if (isEditMode) {
+        await updateDoc(doc(db, "recipes", id), finalData);
+        alert("✅ Recipe updated!");
+      } else {
+        await addRecipe(finalData, user)(dispatch);
+        alert("✅ Recipe added!");
+      }
+      navigate("/my-recipes");
+    } catch (err) {
+      alert("❌ Error: " + err.message);
     }
   };
 
   return (
     <div className="add-recipe-wrapper">
       <div className="add-recipe-banner">
-        <h1>Add Recipe</h1>
+        <h1>{isEditMode ? "Edit Recipe" : "Add Recipe"}</h1>
         <p>
-          Share your delicious ideas with the world. Upload your recipe and
-          inspire fellow foodies!
+          {isEditMode
+            ? "Update your recipe details!"
+            : "Share your delicious ideas with the world!"}
         </p>
       </div>
 
@@ -83,7 +112,6 @@ const AddRecipe = () => {
         <div className="form-group">
           <label>Title</label>
           <input
-            type="text"
             name="title"
             value={formData.title}
             onChange={handleChange}
@@ -99,26 +127,22 @@ const AddRecipe = () => {
             onChange={handleChange}
             rows="4"
             required
-          ></textarea>
+          />
         </div>
 
-        <div className="form-row">
-          <div className="form-group">
-            <label>Category</label>
-            <input
-              type="text"
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-              required
-            />
-          </div>
+        <div className="form-group">
+          <label>Category</label>
+          <input
+            name="category"
+            value={formData.category}
+            onChange={handleChange}
+            required
+          />
         </div>
 
         <div className="form-group">
           <label>Image URL</label>
           <input
-            type="text"
             name="imageUrl"
             value={formData.imageUrl}
             onChange={handleChange}
@@ -126,14 +150,12 @@ const AddRecipe = () => {
           />
         </div>
 
-        {/* ✅ Ingredients Section with Add/Remove */}
         <div className="form-group">
           <label>Ingredients</label>
           <div className="ingredient-input-group">
             <input
-              type="text"
               value={ingredientInput}
-              onChange={(e) => setIngredientInput(e.target.value)}
+              onChange={e => setIngredientInput(e.target.value)}
               placeholder="e.g. 1 tsp salt"
             />
             <button type="button" onClick={handleAddIngredient}>
@@ -160,11 +182,11 @@ const AddRecipe = () => {
             onChange={handleChange}
             rows="4"
             required
-          ></textarea>
+          />
         </div>
 
         <button className="submit-btn" type="submit">
-          Submit Recipe
+          {isEditMode ? "Update Recipe" : "Submit Recipe"}
         </button>
       </form>
     </div>

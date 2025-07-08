@@ -6,22 +6,26 @@ import { auth } from "../firebase";
 import { authReducer, initialAuthState } from "./Reducers/authReducer";
 import { recipeReducer, initialRecipeState } from "./Reducers/recipeReducer";
 
+// Create Context
 const StoreContext = createContext();
 
-// ✅ Fix the key: use `recipe` not `recipes`
+// ✅ Correct nested initial state
 const combinedInitialState = {
   auth: initialAuthState,
-  recipe: initialRecipeState,
+  recipes: initialRecipeState,
 };
 
+// ✅ Combine reducers properly
 const combinedReducer = (state, action) => ({
   auth: authReducer(state.auth, action),
-  recipe: recipeReducer(state.recipe, action), // ✅ fixed
+  recipes: recipeReducer(state.recipes, action),
 });
 
+// Provider Component
 export const StoreProvider = ({ children }) => {
   const [state, dispatch] = useReducer(combinedReducer, combinedInitialState);
 
+  // ✅ Listen for Firebase auth state changes
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       dispatch({ type: "SET_USER", payload: user });
@@ -36,4 +40,5 @@ export const StoreProvider = ({ children }) => {
   );
 };
 
+// Hook to use store
 export const useStore = () => useContext(StoreContext);

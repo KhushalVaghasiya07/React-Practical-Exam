@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { db } from "../../firebase";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "../../Services/store";
 import { GiChefToque } from "react-icons/gi";
 import { BiDish } from "react-icons/bi";
+import { BsPencil, BsTrash } from "react-icons/bs";
 
 const MyRecipes = () => {
   const { state } = useStore();
@@ -22,7 +23,6 @@ const MyRecipes = () => {
           id: doc.id,
           ...doc.data(),
         }));
-
         const myRecipes = allRecipes.filter((r) => r.userId === user?.uid);
         setRecipes(myRecipes);
       } catch (error) {
@@ -30,10 +30,26 @@ const MyRecipes = () => {
       }
     };
 
-    if (user) {
-      fetchUserRecipes();
-    }
+    if (user) fetchUserRecipes();
   }, [user]);
+
+  const handleEdit = (e, recipeId) => {
+    e.stopPropagation();
+    navigate(`/edit-recipe/${recipeId}`);
+  };
+
+  const handleDelete = async (e, recipeId) => {
+    e.stopPropagation();
+    const confirm = window.confirm("Are you sure you want to delete this recipe?");
+    if (!confirm) return;
+
+    try {
+      await deleteDoc(doc(db, "recipes", recipeId));
+      setRecipes((prev) => prev.filter((r) => r.id !== recipeId));
+    } catch (err) {
+      console.error("Failed to delete recipe:", err);
+    }
+  };
 
   const indexOfLast = currentPage * recipesPerPage;
   const indexOfFirst = indexOfLast - recipesPerPage;
@@ -85,7 +101,7 @@ const MyRecipes = () => {
               gap: "8px",
             }}
           >
-              <GiChefToque size={22} />
+            <GiChefToque size={22} />
             Recipes added by{" "}
             <span style={{ color: "#e53935" }}>{user?.email}</span>
           </div>
@@ -100,16 +116,16 @@ const MyRecipes = () => {
                 overflow: "hidden",
                 boxShadow: "0 6px 16px rgba(0,0,0,0.08)",
                 transition: "all 0.3s ease",
-                cursor: "pointer",
                 display: "flex",
                 flexDirection: "column",
+                position: "relative",
               }}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.transform = "translateY(-5px)")
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.transform = "translateY(0)")
-              }
+              onMouseEnter={(e) => {
+                e.currentTarget.querySelector(".hover-actions").style.opacity = 1;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.querySelector(".hover-actions").style.opacity = 0;
+              }}
             >
               <div style={{ position: "relative", height: "220px", overflow: "hidden" }}>
                 <img
@@ -126,7 +142,7 @@ const MyRecipes = () => {
                 />
               </div>
 
-              <div style={{ padding: "16px", textAlign: "left" }}>
+              <div style={{ padding: "16px", textAlign: "left", flexGrow: 1 }}>
                 <p
                   style={{
                     display: "inline-block",
@@ -153,7 +169,6 @@ const MyRecipes = () => {
                 >
                   {recipe.title}
                 </h5>
-
                 <div
                   style={{
                     display: "flex",
@@ -165,6 +180,78 @@ const MyRecipes = () => {
                 >
                   <span>⏱ {recipe.cookTime || "45 min"}</span>
                 </div>
+              </div>
+
+              {/* Hover Action Buttons */}
+              <div
+                className="hover-actions"
+                style={{
+                  opacity: 0,
+                  display: "flex",
+                  justifyContent: "space-between",
+                  padding: "12px 16px 16px",
+                  borderTop: "1px solid #eee",
+                  gap: "10px",
+                  transition: "opacity 0.3s ease",
+                }}
+              >
+                <button
+                  onClick={(e) => handleEdit(e, recipe.id)}
+                  style={{
+                    flex: 1,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    justifyContent: "center",
+                    backgroundColor: "#fff",
+                    color: "#e53935",
+                    border: "2px solid #e53935",
+                    borderRadius: "8px",
+                    padding: "8px 12px",
+                    fontWeight: "600",
+                    cursor: "pointer",
+                    transition: "0.2s ease",
+                  }}
+                  onMouseOver={(e) => {
+                    e.target.style.backgroundColor = "#e53935";
+                    e.target.style.color = "#fff";
+                  }}
+                  onMouseOut={(e) => {
+                    e.target.style.backgroundColor = "#fff";
+                    e.target.style.color = "#e53935";
+                  }}
+                >
+                  <BsPencil /> Edit
+                </button>
+
+                <button
+                  onClick={(e) => handleDelete(e, recipe.id)}
+                  style={{
+                    flex: 1,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    justifyContent: "center",
+                    backgroundColor: "#fff",
+                    color: "#c62828",
+                    border: "2px solid #c62828",
+                    borderRadius: "8px",
+                    padding: "8px 12px",
+                    fontWeight: "600",
+                    cursor: "pointer",
+                    transition: "0.2s ease",
+                  }}
+                  onMouseOver={(e) => {
+                    e.target.style.backgroundColor = "#c62828";
+                    e.target.style.color = "#fff";
+                  }}
+                  onMouseOut={(e) => {
+                    e.target.style.backgroundColor = "#fff";
+                    e.target.style.color = "#c62828";
+                  }}
+                >
+                  <BsTrash /> Delete
+                </button>
               </div>
             </div>
           ))}

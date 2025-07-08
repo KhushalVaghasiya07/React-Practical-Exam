@@ -73,7 +73,7 @@
 .signup-button {
   width: 100%;
   padding: 12px;
-  background-color: #ff5722;
+  background-color: #e92d28;
   color: white;
   border: none;
   border-radius: 8px;
@@ -156,7 +156,7 @@
 }
 
 .login-link a {
-  color: #ff5722;
+  color: #e92d28;
   text-decoration: none;
   font-weight: 500;
 }
