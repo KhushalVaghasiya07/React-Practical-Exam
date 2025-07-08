@@ -1,0 +1,187 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600;700&display=swap');
+
+/* Main Navbar */
+.my-navbar {
+  background-color: white;
+  font-family: 'Fira Sans', sans-serif;
+  height: 80px;
+  border-bottom: 1px solid #eaeaea;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  position: relative;
+  z-index: 1000;
+}
+
+/* Container */
+.custom-container {
+  max-width: 1320px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Flex Wrapper */
+.navbar-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* Left Section */
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+/* Logo */
+.nav-logo {
+  height: 40px;
+  object-fit: contain;
+  display: block;
+  border: 1px solid black;
+  padding: 2px;
+}
+
+/* Nav Links */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-links .dropdown-toggle {
+  font-weight: 600;
+  color: #222 !important;
+  font-size: 15px;
+  padding: 10px 15px !important;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+}
+
+.nav-links .dropdown-toggle:hover {
+  color: #ff5722 !important;
+}
+
+/* Right Section */
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.nav-icons {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-icon {
+  font-size: 20px;
+  color: #222;
+  cursor: pointer;
+}
+
+/* User Dropdown - Hover Only */
+.user-dropdown-container {
+  position: relative;
+  display: inline-block;
+}
+
+.user-icon {
+  transition: color 0.2s;
+}
+
+.user-icon:hover {
+  color: #ff5722;
+}
+
+/* Stylish Dropdown Card */
+.user-dropdown-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 120%;
+  background-color: white;
+  min-width: 220px;
+  border: 1px solid #c62828;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  padding: 16px;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+}
+
+.user-dropdown-container:hover .user-dropdown-menu {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Email Display */
+.user-email {
+  font-size: 14px;
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 12px;
+  word-break: break-word;
+}
+
+/* Buttons inside Dropdown */
+.logout-btn,
+.dropdown-link {
+  display: block;
+  width: 100%;
+  padding: 10px 14px;
+  margin-top: 8px;
+  text-align: center;
+  background-color: white;
+  border: 1px solid #c62828;
+  color: #000;
+  font-weight: 600;
+  font-size: 14px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  font-family: 'Fira Sans', sans-serif;
+}
+
+.logout-btn:hover,
+.dropdown-link:hover {
+  background-color: #c62828;
+  color: white;
+}
+
+/* Recipe Buttons */
+.recipe-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.add-recipe-btn {
+  text-decoration: none;
+  background-color: #e92d28;
+  color: white !important;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 8px 16px;
+  border: none;
+}
+
+.my-recipes-btn {
+  text-decoration: none;
+  background-color: white;
+  color: #222 !important;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+}

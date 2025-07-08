@@ -1,0 +1,85 @@
+.journal-section {
+  background-color: #f9f3ee;
+  padding: 60px 0;
+  text-align: center;
+  font-family: 'Fira Sans', sans-serif;
+}
+
+.journal-container {
+  max-width: 1320px;
+  margin: auto;
+  padding: 0 20px;
+}
+
+.journal-title {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.journal-subtitle {
+  max-width: 700px;
+  margin: 0 auto 40px;
+  color: #444;
+  font-size: 16px;
+}
+
+.journal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+.journal-card {
+  background-color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  text-align: left;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: 0.3s ease;
+}
+
+.journal-img-box {
+  position: relative;
+  overflow: hidden;
+}
+
+.journal-img-box img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.journal-badge {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background-color: #e4312b;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.journal-content {
+  padding: 20px;
+}
+
+.journal-post-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #111;
+}
+
+.journal-meta {
+  font-size: 14px;
+  color: #444;
+  margin-bottom: 5px;
+}
+
+.journal-read {
+  font-size: 13px;
+  color: #888;
+}

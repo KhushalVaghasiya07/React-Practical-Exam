@@ -1,0 +1,144 @@
+.custom-footer-dark {
+  background-color: #111;
+  color: #f1f1f1;
+  padding: 60px 20px 30px;
+  font-family: 'Fira Sans', sans-serif;
+}
+
+.footer-container-dark {
+  max-width: 1320px;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  justify-content: space-between;
+}
+
+.footer-section {
+  flex: 1 1 220px;
+}
+
+.footer-logo {
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.footer-section h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.footer-section p {
+  font-size: 14px;
+  color: #ccc;
+  margin-bottom: 10px;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-section ul li {
+  margin-bottom: 8px;
+}
+
+.footer-section ul li a {
+  color: #ccc;
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-section ul li a:hover {
+  color: #ff6b6b;
+}
+
+.newsletter-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.newsletter-form input {
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+}
+
+.newsletter-form button {
+  background-color: #ff6b6b;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.newsletter-form button:hover {
+  background-color: #ff3d3d;
+}
+
+.social-icons-dark {
+  display: flex;
+  gap: 15px;
+  margin-top: 12px;
+}
+
+.social-icons-dark a {
+  color: #ccc;
+  font-size: 18px;
+  transition: color 0.3s;
+}
+
+.social-icons-dark a:hover {
+  color: #ff6b6b;
+}
+
+.footer-bottom-dark {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #333;
+  padding-top: 20px;
+  margin-top: 30px;
+  font-size: 13px;
+  color: #777;
+  max-width: 1320px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.scroll-top {
+  background: #ff6b6b;
+  color: white;
+  padding: 8px 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.scroll-top:hover {
+  background-color: #ff3d3d;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .footer-container-dark {
+    flex-direction: column;
+  }
+
+  .footer-bottom-dark {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
