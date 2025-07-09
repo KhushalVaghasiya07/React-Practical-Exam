@@ -11,13 +11,13 @@ const categories = [
   "SEAFOOD", "SIDE DISHES", "SNACKS",
 ];
 
-const HeroSection = () => {
+const HeroSection = ({ searchQuery, setSearchQuery, onCategorySelect }) => {
   return (
     <section className="hero-section">
       <Container className="hero-container">
         <h1 className="hero-title">Platea Recipes</h1>
         <p className="hero-subtext">
-          Explore and share daily cooking ideas with our recipes. Discover dishes, videos, tips, and inspiration tailored to your tastes and the community you connect with.
+          Explore and share daily cooking ideas with our recipes...
         </p>
 
         <div className="search-bar">
@@ -25,6 +25,8 @@ const HeroSection = () => {
           <input
             type="text"
             placeholder="Find what do you want to cook today"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
           <button className="search-button">
             <BsSearch />
@@ -33,7 +35,14 @@ const HeroSection = () => {
 
         <div className="category-list">
           {categories.map((item, index) => (
-            <span key={index} className="category-pill">
+            <span
+              key={index}
+              className="category-pill"
+              onClick={() => {
+                setSearchQuery(""); // Optional: clear text search
+                onCategorySelect(item); // Trigger category selection
+              }}
+            >
               {item}
             </span>
           ))}
@@ -42,5 +51,6 @@ const HeroSection = () => {
     </section>
   );
 };
+
 
 export default HeroSection;

@@ -5,7 +5,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase";
 import { useNavigate } from "react-router-dom";
 
-const RecipeList = () => {
+const RecipeList = ({ searchQuery = "", selectedCategory = "" }) => {
   const [recipes, setRecipes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const recipesPerPage = 6;
@@ -28,14 +28,25 @@ const RecipeList = () => {
     fetchRecipes();
   }, []);
 
+  // 🔍 Filter by title, category (search), and exact category match
+  const filteredRecipes = recipes.filter((recipe) => {
+    const titleMatch = recipe.title?.toLowerCase().includes(searchQuery.toLowerCase());
+    const categoryMatch = recipe.category?.toLowerCase().includes(searchQuery.toLowerCase());
+    const categoryFilterMatch = selectedCategory
+      ? recipe.category?.toLowerCase() === selectedCategory.toLowerCase()
+      : true;
+
+    return (titleMatch || categoryMatch) && categoryFilterMatch;
+  });
+
   const indexOfLastRecipe = currentPage * recipesPerPage;
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage;
-  const currentRecipes = recipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
-  const totalPages = Math.ceil(recipes.length / recipesPerPage);
+  const currentRecipes = filteredRecipes.slice(indexOfFirstRecipe, indexOfLastRecipe);
+  const totalPages = Math.ceil(filteredRecipes.length / recipesPerPage);
 
   return (
     <div className="recipe-wrapper">
-      {recipes.length === 0 ? (
+      {filteredRecipes.length === 0 ? (
         <p className="no-recipe-msg">No recipes found</p>
       ) : (
         <>
@@ -65,18 +76,19 @@ const RecipeList = () => {
             </div>
           ))}
 
-          {/* ✅ Pagination Controls */}
-          <div className="pagination">
-            {Array.from({ length: totalPages }, (_, i) => (
-              <button
-                key={i}
-                className={`page-btn ${currentPage === i + 1 ? "active" : ""}`}
-                onClick={() => setCurrentPage(i + 1)}
-              >
-                {i + 1}
-              </button>
-            ))}
-          </div>
+          {totalPages > 1 && (
+            <div className="pagination">
+              {Array.from({ length: totalPages }, (_, i) => (
+                <button
+                  key={i}
+                  className={`page-btn ${currentPage === i + 1 ? "active" : ""}`}
+                  onClick={() => setCurrentPage(i + 1)}
+                >
+                  {i + 1}
+                </button>
+              ))}
+            </div>
+          )}
         </>
       )}
     </div>

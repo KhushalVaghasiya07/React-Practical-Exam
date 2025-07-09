@@ -7,8 +7,7 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 
 const AddRecipe = () => {
-  // Correctly get the param
-  const { id } = useParams();  // Use `id` if your route is "/edit-recipe/:id"
+  const { id } = useParams();  
   const isEditMode = Boolean(id);
 
   const [formData, setFormData] = useState({

@@ -8,15 +8,25 @@ import Signup from "./Components/Signup Page/Signup";
 import RecipeDetail from "./Components/RecipeDetail/RecipeDetail";
 import MyRecipes from "./Components/MyRecipes/MyRecipes";
 import { useStore } from "./Services/store";
+import "./App.css"
 
 function App() {
   const { state } = useStore();
-  const user = state.auth.user;
+  const { user, loading } = state.auth;
+
+  if (loading && !user) {
+    return (
+      <div className="app-loader">
+        <div className="spinner" />
+        <p>Loading your kitchen...</p>
+      </div>
+    );
+  }
+
 
   return (
     <Router>
       <Header />
-
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/recipe/:id" element={<RecipeDetail />} />
@@ -36,10 +46,10 @@ function App() {
           element={user ? <MyRecipes /> : <Navigate to="/login" replace />}
         />
       </Routes>
-
       <Footer />
     </Router>
   );
 }
+
 
 export default App;

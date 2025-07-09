@@ -12,7 +12,7 @@ const MyRecipes = () => {
   const user = state.auth.user;
   const [recipes, setRecipes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const recipesPerPage = 6;
+  const recipesPerPage = 8; // Show 8 cards per page
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -63,7 +63,7 @@ const MyRecipes = () => {
         maxWidth: "1320px",
         margin: "40px auto",
         display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+        gridTemplateColumns: "repeat(4, 1fr)", // 4 cards in one row
         gap: "24px",
         fontFamily: "'Fira Sans', sans-serif",
         padding: "20px",
@@ -119,12 +119,7 @@ const MyRecipes = () => {
                 display: "flex",
                 flexDirection: "column",
                 position: "relative",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.querySelector(".hover-actions").style.opacity = 1;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.querySelector(".hover-actions").style.opacity = 0;
+                cursor: "pointer",
               }}
             >
               <div style={{ position: "relative", height: "220px", overflow: "hidden" }}>
@@ -137,8 +132,6 @@ const MyRecipes = () => {
                     objectFit: "cover",
                     transition: "transform 0.4s ease",
                   }}
-                  onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
-                  onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
                 />
               </div>
 
@@ -182,17 +175,13 @@ const MyRecipes = () => {
                 </div>
               </div>
 
-              {/* Hover Action Buttons */}
               <div
-                className="hover-actions"
                 style={{
-                  opacity: 0,
                   display: "flex",
                   justifyContent: "space-between",
                   padding: "12px 16px 16px",
                   borderTop: "1px solid #eee",
                   gap: "10px",
-                  transition: "opacity 0.3s ease",
                 }}
               >
                 <button
@@ -210,15 +199,6 @@ const MyRecipes = () => {
                     padding: "8px 12px",
                     fontWeight: "600",
                     cursor: "pointer",
-                    transition: "0.2s ease",
-                  }}
-                  onMouseOver={(e) => {
-                    e.target.style.backgroundColor = "#e53935";
-                    e.target.style.color = "#fff";
-                  }}
-                  onMouseOut={(e) => {
-                    e.target.style.backgroundColor = "#fff";
-                    e.target.style.color = "#e53935";
                   }}
                 >
                   <BsPencil /> Edit
@@ -239,15 +219,6 @@ const MyRecipes = () => {
                     padding: "8px 12px",
                     fontWeight: "600",
                     cursor: "pointer",
-                    transition: "0.2s ease",
-                  }}
-                  onMouseOver={(e) => {
-                    e.target.style.backgroundColor = "#c62828";
-                    e.target.style.color = "#fff";
-                  }}
-                  onMouseOut={(e) => {
-                    e.target.style.backgroundColor = "#fff";
-                    e.target.style.color = "#c62828";
                   }}
                 >
                   <BsTrash /> Delete
@@ -278,7 +249,6 @@ const MyRecipes = () => {
                   fontWeight: "600",
                   borderRadius: "8px",
                   cursor: "pointer",
-                  transition: "0.3s ease",
                 }}
               >
                 {i + 1}
