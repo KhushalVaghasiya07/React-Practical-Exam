@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import HeroSection from "../../Components/HeroSection/HeroSection";
-import RecipeList from "../../Components/RecipeList/RecipeList";
-import Cuisines from "../../Components/Cuisines/Cuisines";
-import Journal from "../../Components/Journal/Journal";
+import { useState } from "react";
+import Cuisines from  "../Components/Cuisines/Cuisines";
+import HeroSection from "../Components/HeroSection/HeroSection";
+import Journal from "../Components/Journal/Journal";
+import RecipeList from "../Components/RecipeList/RecipeList";
 
 function Home() {
   const [searchQuery, setSearchQuery] = useState("");

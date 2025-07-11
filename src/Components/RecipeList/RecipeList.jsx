@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./RecipeList.css";
-import { BsClock, BsHeart } from "react-icons/bs";
+import { BsClock, BsHeartFill } from "react-icons/bs";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase";
 import { useNavigate } from "react-router-dom";
 
 const RecipeList = ({ searchQuery = "", selectedCategory = "" }) => {
   const [recipes, setRecipes] = useState([]);
+  const [likedRecipes, setLikedRecipes] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const recipesPerPage = 6;
   const navigate = useNavigate();
@@ -28,7 +29,13 @@ const RecipeList = ({ searchQuery = "", selectedCategory = "" }) => {
     fetchRecipes();
   }, []);
 
-  // 🔍 Filter by title, category (search), and exact category match
+  const toggleLike = (id) => {
+    setLikedRecipes((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
   const filteredRecipes = recipes.filter((recipe) => {
     const titleMatch = recipe.title?.toLowerCase().includes(searchQuery.toLowerCase());
     const categoryMatch = recipe.category?.toLowerCase().includes(searchQuery.toLowerCase());
@@ -51,16 +58,20 @@ const RecipeList = ({ searchQuery = "", selectedCategory = "" }) => {
       ) : (
         <>
           {currentRecipes.map((recipe) => (
-            <div
-              className="recipe-card"
-              key={recipe.id}
-              onClick={() => navigate(`/recipe/${recipe.id}`)}
-            >
-              <div className="card-img-wrapper">
+            <div className="recipe-card" key={recipe.id}>
+              <div className="card-img-wrapper" onClick={() => navigate(`/recipe/${recipe.id}`)}>
                 <img src={recipe.imageUrl} alt={recipe.title} />
                 <span className="rating-badge">⭐ {recipe.rating || "4.5"}</span>
                 <div className="top-icons">
-                  <BsHeart className="icon" />
+                  <div
+                    className={`heart-icon ${likedRecipes[recipe.id] ? "liked" : ""}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleLike(recipe.id);
+                    }}
+                  >
+                    <BsHeartFill />
+                  </div>
                 </div>
               </div>
 

@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600;700&display=swap');
 
 :root {
-  --primary: #e04848;
+  --primary: #e53935;
   --primary-light: #ffebee;
   --text-dark: #222;
   --text-muted: #666;
@@ -19,7 +19,6 @@
   padding: 40px 20px;
 }
 
-/* === Recipe Card === */
 .recipe-card {
   background-color: var(--white);
   border-radius: 16px;
@@ -45,27 +44,6 @@
   margin-bottom: 16px;
 }
 
-.section-heading {
-  grid-column: 1 / -1;
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-.main-title {
-  font-size: 36px;
-  font-weight: 700;
-  color: #e53935;
-  margin-bottom: 8px;
-}
-
-.sub-title {
-  font-size: 18px;
-  color: #666;
-  max-width: 700px;
-  margin: 0 auto;
-  line-height: 1.5;
-}
-
 .card-img-wrapper img {
   width: 100%;
   height: 100%;
@@ -87,33 +65,40 @@
   padding: 4px 8px;
   border-radius: 10px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  color: #e53935;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
-.top-icons {
+.heart-icon {
   position: absolute;
   top: 10px;
   right: 10px;
-  display: flex;
-  gap: 10px;
-}
-
-.icon {
-  font-size: 40px;
-  color: #e53935;
-  background: var(--white);
-  padding: 8px;
+  background-color: white;
+  border: 2px solid var(--primary);
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: var(--primary);
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1;
 }
 
-.icon:hover {
-  font-weight: bold;
-  color: var(--white);
-  background-color: #e53935;
+.heart-icon:hover {
+  background-color: var(--primary);
+  color: white;
   transform: scale(1.1);
+}
+
+.heart-icon.liked {
+  background-color: var(--primary);
+  color: white;
 }
 
 .card-content {
@@ -125,8 +110,8 @@
   display: inline-block;
   font-size: 13px;
   font-weight: 600;
-  color: #e53935;
-  border: 1px solid #e53935;
+  color: var(--primary);
+  border: 1px solid var(--primary);
   padding: 4px 10px;
   border-radius: 20px;
   margin-bottom: 8px;
@@ -151,7 +136,6 @@
   align-items: center;
 }
 
-/* === No Recipe Message === */
 .no-recipe-msg {
   text-align: center;
   width: 100%;
@@ -160,95 +144,6 @@
   margin-top: 50px;
 }
 
-/* === Bottom Buttons on Hover === */
-.bottom-action-buttons {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 14px 20px;
-  background: linear-gradient(to top, rgba(255, 255, 255, 0.95) 80%, transparent);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(100%);
-  transition: all 0.3s ease;
-  backdrop-filter: blur(5px);
-  border-bottom-left-radius: 16px;
-  border-bottom-right-radius: 16px;
-}
-
-.recipe-card:hover .bottom-action-buttons {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0);
-}
-
-.action-btn {
-  flex: 1;
-  font-size: 15px;
-  font-weight: 600;
-  padding: 10px 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border: none;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.edit-btn {
-  background-color: #f5f5f5;
-  color: #333;
-  border: 1px solid #c62828;
-}
-
-.edit-btn:hover {
-  border: none;
-  background-color: #c62828;
-  color: var(--white);
-}
-
-.delete-btn {
-  border: 1px solid #c62828;
-  background-color: var(--white);
-  color: #333;
-  position: relative;
-  overflow: hidden;
-}
-
-.delete-btn:hover {
-  border: none;
-  background-color: #c62828;
-  color: var(--white);
-}
-
-.delete-btn:hover::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-color: rgba(229, 57, 53, 0.9);
-  z-index: -1;
-  animation: redGlow 1.5s infinite alternate;
-}
-
-@keyframes redGlow {
-  0% {
-    opacity: 0.8;
-  }
-
-  100% {
-    opacity: 1;
-  }
-}
-
-/* === Pagination Styles === */
 .pagination {
   width: 100%;
   display: flex;
@@ -278,7 +173,7 @@
   color: var(--white);
 }
 
-/* === Responsive === */
+/* Responsive */
 @media (max-width: 768px) {
   .recipe-wrapper {
     padding: 30px 15px;
@@ -297,14 +192,5 @@
 @media (max-width: 480px) {
   .recipe-card {
     width: 100%;
-  }
-
-  .bottom-action-buttons {
-    padding: 12px 15px;
-  }
-
-  .action-btn {
-    font-size: 14px;
-    padding: 8px 12px;
   }
 }

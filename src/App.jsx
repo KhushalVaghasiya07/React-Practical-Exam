@@ -1,14 +1,15 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Home from "./assets/Pages/Home";
-import Footer from "./Components/Footer/Footer";
-import Header from "./Components/Navbar/Navbar";
+import { Navigate, Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import "./App.css";
 import AddRecipe from "./Components/Add Recipe Form/AddRecipeForm";
+import Footer from "./Components/Footer/Footer";
 import Login from "./Components/LoginPage/Login";
-import Signup from "./Components/Signup Page/Signup";
-import RecipeDetail from "./Components/RecipeDetail/RecipeDetail";
 import MyRecipes from "./Components/MyRecipes/MyRecipes";
+import Header from "./Components/Navbar/Navbar";
+import RecipeDetail from "./Components/RecipeDetail/RecipeDetail";
+import Signup from "./Components/Signup Page/Signup";
+import Home from "../src/Pages/Home";
 import { useStore } from "./Services/store";
-import "./App.css"
+import AllRecipes from "./Pages/Recipe";
 
 function App() {
   const { state } = useStore();
@@ -29,6 +30,8 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/allRecipes" element={<AllRecipes />} />
+
         <Route path="/recipe/:id" element={<RecipeDetail />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
